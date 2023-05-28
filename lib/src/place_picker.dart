@@ -336,56 +336,62 @@ class _PlacePickerState extends State<PlacePicker> {
   }
 
   Widget _buildSearchBar(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        widget.automaticallyImplyAppBarLeading || widget.onTapBack != null
-            ? IconButton(
-                onPressed: () {
-                  if (!showIntroModal ||
-                      widget.introModalWidgetBuilder == null) {
-                    if (widget.onTapBack != null) {
-                      widget.onTapBack!();
-                      return;
+    return Container(
+      color: Color(0xFFE17D04),
+      child: Padding(
+        padding: const EdgeInsets.only(top:8.0, bottom: 4.0),
+        child: Row(
+          children: <Widget>[
+            widget.automaticallyImplyAppBarLeading || widget.onTapBack != null
+                ? IconButton(
+                    onPressed: () {
+                      if (!showIntroModal ||
+                          widget.introModalWidgetBuilder == null) {
+                        if (widget.onTapBack != null) {
+                          widget.onTapBack!();
+                          return;
+                        }
+                        Navigator.maybePop(context);
+                      }
+                    },
+                    icon: Icon(
+                      Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+                    ),
+                    color: Colors.white,
+                    padding: EdgeInsets.zero)
+                : SizedBox(width: 15),
+            Expanded(
+              child: AutoCompleteSearch(
+                  appBarKey: appBarKey,
+                  searchBarController: searchBarController,
+                  sessionToken: provider!.sessionToken,
+                  hintText: widget.hintText,
+                  searchingText: widget.searchingText,
+                  debounceMilliseconds: widget.autoCompleteDebounceInMilliseconds,
+                  onPicked: (prediction) {
+                    _pickPrediction(prediction);
+                  },
+                  onSearchFailed: (status) {
+                    if (widget.onAutoCompleteFailed != null) {
+                      widget.onAutoCompleteFailed!(status);
                     }
-                    Navigator.maybePop(context);
-                  }
-                },
-                icon: Icon(
-                  Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-                ),
-                color: Colors.black.withAlpha(128),
-                padding: EdgeInsets.zero)
-            : SizedBox(width: 15),
-        Expanded(
-          child: AutoCompleteSearch(
-              appBarKey: appBarKey,
-              searchBarController: searchBarController,
-              sessionToken: provider!.sessionToken,
-              hintText: widget.hintText,
-              searchingText: widget.searchingText,
-              debounceMilliseconds: widget.autoCompleteDebounceInMilliseconds,
-              onPicked: (prediction) {
-                _pickPrediction(prediction);
-              },
-              onSearchFailed: (status) {
-                if (widget.onAutoCompleteFailed != null) {
-                  widget.onAutoCompleteFailed!(status);
-                }
-              },
-              autocompleteOffset: widget.autocompleteOffset,
-              autocompleteRadius: widget.autocompleteRadius,
-              autocompleteLanguage: widget.autocompleteLanguage,
-              autocompleteComponents: widget.autocompleteComponents,
-              autocompleteTypes: widget.autocompleteTypes,
-              strictbounds: widget.strictbounds,
-              region: widget.region,
-              initialSearchString: widget.initialSearchString,
-              searchForInitialValue: widget.searchForInitialValue,
-              autocompleteOnTrailingWhitespace:
-                  widget.autocompleteOnTrailingWhitespace),
+                  },
+                  autocompleteOffset: widget.autocompleteOffset,
+                  autocompleteRadius: widget.autocompleteRadius,
+                  autocompleteLanguage: widget.autocompleteLanguage,
+                  autocompleteComponents: widget.autocompleteComponents,
+                  autocompleteTypes: widget.autocompleteTypes,
+                  strictbounds: widget.strictbounds,
+                  region: widget.region,
+                  initialSearchString: widget.initialSearchString,
+                  searchForInitialValue: widget.searchForInitialValue,
+                  autocompleteOnTrailingWhitespace:
+                      widget.autocompleteOnTrailingWhitespace),
+            ),
+            SizedBox(width: 5),
+          ],
         ),
-        SizedBox(width: 5),
-      ],
+      ),
     );
   }
 

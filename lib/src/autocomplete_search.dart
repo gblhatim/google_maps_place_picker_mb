@@ -104,11 +104,8 @@ class AutoCompleteSearchState extends State<AutoCompleteSearch> {
             child: RoundedFrame(
               height: widget.height,
               padding: const EdgeInsets.only(right: 10),
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.black54
-                  : Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              elevation: 4.0,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
               child: Row(
                 children: <Widget>[
                   SizedBox(width: 10),
@@ -128,6 +125,12 @@ class AutoCompleteSearchState extends State<AutoCompleteSearch> {
       controller: controller,
       focusNode: focus,
       decoration: InputDecoration(
+        labelStyle: TextStyle(
+          fontFamily: 'Plus Jakarta Sans', 
+          color: const Color(0xFF14181B),
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
+        ),
         hintText: widget.hintText,
         border: InputBorder.none,
         errorBorder: InputBorder.none,
@@ -240,8 +243,8 @@ class AutoCompleteSearchState extends State<AutoCompleteSearch> {
       builder: (context) => Positioned(
         top: appBarRenderBox!.paintBounds.shift(offset).top +
             appBarRenderBox.size.height,
-        left: screenWidth * 0.025,
-        right: screenWidth * 0.025,
+        left: screenWidth * 0.0 ,
+        right: screenWidth * 0.0,
         child: Material(
           elevation: 4.0,
           child: overlayChild,
@@ -278,13 +281,21 @@ class AutoCompleteSearchState extends State<AutoCompleteSearch> {
     return ListBody(
       children: predictions
           .map(
-            (p) => PredictionTile(
+            (p) => Column(
+              children: [
+                PredictionTile(
               prediction: p,
               onTap: (selectedPrediction) {
                 resetSearchBar();
                 widget.onPicked(selectedPrediction);
               },
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Divider(thickness: 1.5,),
+            )
+              ],
+            )
           )
           .toList(),
     );
